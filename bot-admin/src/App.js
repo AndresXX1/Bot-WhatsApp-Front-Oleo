@@ -14,11 +14,11 @@ function App() {
         const fetchData = async () => {
             try {
                 // Obtener respuestas
-                const responsesResult = await axios.get('http://localhost:3000/api/get-responses');
+                const responsesResult = await axios.get('https://whatsapp-bot-cocina-oleo-back-1.onrender.com/api/get-responses');
                 setResponses(responsesResult.data);
 
                 // Obtener código QR
-                const qrResult = await axios.get('http://localhost:3000/api/get-qr');
+                const qrResult = await axios.get('https://whatsapp-bot-cocina-oleo-back-1.onrender.com/api/get-qr');
                 if (qrResult.data.qrCode && qrResult.data.qrCode.startsWith('data:image/png;base64,')) {
                     setQrCode(qrResult.data.qrCode);
                 } else {
@@ -56,7 +56,7 @@ function App() {
     const handleSaveResponse = async () => {
         if (selectedResponse) {
             try {
-                await axios.post('http://localhost:3000/api/update-response', {
+                await axios.post('https://whatsapp-bot-cocina-oleo-back-1.onrender.com/api/update-response', {
                     id: selectedResponse._id,
                     newResponse
                 });
