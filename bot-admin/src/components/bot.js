@@ -13,7 +13,7 @@ const BotComponent = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const responsesResult = await axios.get('https://whatsapp-bot-cocina-oleo-back.onrender.com/api/get-responses', {
+                const responsesResult = await axios.get('http://localhost:3000/api/get-responses', {
                     params: { cacheBust: Date.now() }
                 });
                 const formattedResponses = [];
@@ -50,7 +50,7 @@ const BotComponent = () => {
     const handleSaveResponse = async () => {
         if (selectedResponse) {
             try {
-                await axios.post('https://whatsapp-bot-cocina-oleo-back.onrender.com/api/update-response', {
+                await axios.post('http://localhost:3000/api/update-response', {
                     id: selectedResponse._id,
                     newResponse
                 });

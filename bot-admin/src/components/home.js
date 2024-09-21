@@ -9,7 +9,7 @@ const QRCodeComponent = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const qrResult = await axios.get('https://whatsapp-bot-cocina-oleo-back.onrender.com/api/get-qr');
+                const qrResult = await axios.get('http://localhost:3000/api/get-qr');
                 
                 // Verificamos que el QR es base64
                 if (qrResult.data.qrCode && qrResult.data.qrCode.startsWith('data:image/png;base64,')) {
