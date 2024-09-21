@@ -13,11 +13,13 @@ const BotComponent = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const responsesResult = await axios.get('http://localhost:3001/api/get-responses');
+                const responsesResult = await axios.get('http://localhost:3000/api/get-responses', {
+                    params: { cacheBust: Date.now() }
+                });
                 const formattedResponses = [];
                 responsesResult.data.forEach(response => {
                     formattedResponses.push({ keyword: response.keyword, isBot: false });
-                    formattedResponses.push({ response: response.response, isBot: true });
+                    formattedResponses.push({ response: response.response, isBot: true, _id: response._id, modifiedAt: response.modifiedAt });
                 });
                 setResponses(formattedResponses);
             } catch (error) {
@@ -52,9 +54,18 @@ const BotComponent = () => {
                     id: selectedResponse._id,
                     newResponse
                 });
-                setResponses(responses.map(resp =>
-                    resp._id === selectedResponse._id ? { ...resp, response: newResponse } : resp
-                ));
+                
+                // Actualiza solo la respuesta modificada en el estado local
+                setResponses(prevResponses => {
+                    const updatedResponses = [...prevResponses];
+                    const index = updatedResponses.findIndex(r => r._id === selectedResponse._id);
+                    if (index !== -1) {
+                        updatedResponses[index].response = newResponse;
+                        updatedResponses[index].modifiedAt = Date.now();
+                    }
+                    return updatedResponses;
+                });
+                
                 handleCloseDialog();
             } catch (error) {
                 console.error('Error updating response:', error.message);
