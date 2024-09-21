@@ -2,7 +2,7 @@
   "name": "bot-admin",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3000/",
+  "proxy": "https://whatsapp-bot-cocina-oleo-back.onrender.com/",
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6",
