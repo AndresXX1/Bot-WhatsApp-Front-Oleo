@@ -16,11 +16,13 @@ const BotComponent = () => {
                 const responsesResult = await axios.get('https://whatsapp-bot-cocina-oleo-back.onrender.com/api/get-responses', {
                     params: { cacheBust: Date.now() }
                 });
+                
                 const formattedResponses = [];
                 responsesResult.data.forEach(response => {
-                    formattedResponses.push({ keyword: response.keyword, isBot: false });
-                    formattedResponses.push({ response: response.response, isBot: true, _id: response._id, modifiedAt: response.modifiedAt });
+                    formattedResponses.push({ opcion: response.opcion, isBot: false });
+                    formattedResponses.push({ mensaje: response.mensaje, isBot: true, _id: response._id, modifiedAt: response.modifiedAt });
                 });
+    
                 setResponses(formattedResponses);
             } catch (error) {
                 console.error('Error fetching data:', error.message);
@@ -29,11 +31,12 @@ const BotComponent = () => {
                 setLoading(false);
             }
         };
-
+    
         fetchData();
         const intervalId = setInterval(fetchData, 50000);
         return () => clearInterval(intervalId);
     }, []);
+    
 
     const handleOpenDialog = (response) => {
         setSelectedResponse(response);
@@ -115,30 +118,31 @@ const BotComponent = () => {
                                     justifyContent: response.isBot ? 'flex-start' : 'flex-end'
                                 }}>
                                     <div
-                                        onClick={() => response.isBot ? handleOpenDialog(response) : null}
-                                        style={{
-                                            borderRadius: '10px',
-                                            padding: '10px',
-                                            backgroundColor: response.isBot ? '#e0e0e0' : '#25D366',
-                                            color: response.isBot ? '#000' : '#fff',
-                                            maxWidth: '70%',
-                                            minWidth: '20%',
-                                            wordBreak: 'break-word',
-                                            cursor: response.isBot ? 'pointer' : 'default',
-                                            display: 'flex',
-                                            alignItems: 'center'
-                                        }}
-                                    >
-                                        {response.isBot && (
-                                            <EditIcon
-                                                style={{
-                                                    fontSize: '18px',
-                                                    marginRight: '5px'
-                                                }}
-                                            />
-                                        )}
-                                        {response.isBot ? response.response : response.keyword}
-                                    </div>
+    onClick={() => response.isBot ? handleOpenDialog(response) : null}
+    style={{
+        borderRadius: '10px',
+        padding: '10px',
+        backgroundColor: response.isBot ? '#e0e0e0' : '#25D366',
+        color: response.isBot ? '#000' : '#fff',
+        maxWidth: '70%',
+        minWidth: '20%',
+        wordBreak: 'break-word',
+        cursor: response.isBot ? 'pointer' : 'default',
+        display: 'flex',
+        alignItems: 'center'
+    }}
+>
+    {response.isBot && (
+        <EditIcon
+            style={{
+                fontSize: '18px',
+                marginRight: '5px'
+            }}
+        />
+    )}
+    {response.isBot ? response.mensaje : response.opcion}
+</div>
+
                                 </div>
                             ))}
                         </div>

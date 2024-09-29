@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CircularProgress } from '@mui/material';
+import { QRCodeCanvas } from 'qrcode.react'; // Cambiamos la importación a QRCodeCanvas
 
 const QRCodeComponent = () => {
     const [qrCode, setQrCode] = useState('');
@@ -11,18 +12,15 @@ const QRCodeComponent = () => {
             try {
                 const qrResult = await axios.get('https://whatsapp-bot-cocina-oleo-back.onrender.com/api/get-qr');
                 
-                // Verificamos que el QR es base64
-                if (qrResult.data.qrCode && qrResult.data.qrCode.startsWith('data:image/png;base64,')) {
-                    // Solo actualiza si el QR ha cambiado
-                    if (qrResult.data.qrCode !== qrCode) {
-                        setQrCode(qrResult.data.qrCode);
-                    }
+                // Si el QR llega como texto, lo guardamos
+                if (qrResult.data.qrCode) {
+                    setQrCode(qrResult.data.qrCode);
                 } else {
-                    setQrCode('https://via.placeholder.com/300');
+                    setQrCode('');
                 }
             } catch (error) {
                 console.error('Error fetching QR code:', error.message);
-                setQrCode('https://via.placeholder.com/300');
+                setQrCode('');
             } finally {
                 setLoading(false);
             }
@@ -31,7 +29,7 @@ const QRCodeComponent = () => {
         fetchData();
         const intervalId = setInterval(fetchData, 50000); // 50 segundos en lugar de 2 segundos
         return () => clearInterval(intervalId);
-    }, [qrCode]);
+    }, []);
 
     return (
         <div>
@@ -42,10 +40,9 @@ const QRCodeComponent = () => {
                 ) : (
                     <>
                         {qrCode ? (
-                            <img 
-                                src={qrCode} // Aquí usamos directamente la cadena base64 sin timestamp
-                                alt="QR Code" 
-                                style={{ width: '300px', height: '300px' }} 
+                            <QRCodeCanvas 
+                                value={qrCode} // Usamos el texto recibido para generar el QR
+                                size={300} // Tamaño del QR
                             />
                         ) : <p>No QR Code disponible</p>}
                     </>
