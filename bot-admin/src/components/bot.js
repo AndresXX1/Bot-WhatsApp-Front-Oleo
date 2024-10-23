@@ -1,79 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { CircularProgress, List, ListItem, ListItemText, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
 const BotComponent = () => {
-    const [responses, setResponses] = useState([]);
-    const [selectedResponse, setSelectedResponse] = useState(null);
-    const [newResponse, setNewResponse] = useState('');
+    const [intents, setIntents] = useState([]);
+    const [selectedIntent, setSelectedIntent] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const responsesResult = await axios.get('https://whatsapp-bot-cocina-oleo-back.onrender.com/api/get-responses', {
+                const intentsResult = await axios.get('https://whatsapp-bot-oleo.onrender.com/api/dialogflow/intents', {
                     params: { cacheBust: Date.now() }
                 });
-                
-                const formattedResponses = [];
-                responsesResult.data.forEach(response => {
-                    formattedResponses.push({ opcion: response.opcion, isBot: false });
-                    formattedResponses.push({ mensaje: response.mensaje, isBot: true, _id: response._id, modifiedAt: response.modifiedAt });
-                });
-    
-                setResponses(formattedResponses);
+                setIntents(intentsResult.data);
             } catch (error) {
-                console.error('Error fetching data:', error.message);
-                alert('Error fetching data: ' + error.message);
+                console.error('Error fetching intents:', error.message);
+                alert('Error fetching intents: ' + error.message);
             } finally {
                 setLoading(false);
             }
         };
-    
+
         fetchData();
-        const intervalId = setInterval(fetchData, 50000);
+        const intervalId = setInterval(fetchData, 30000);
         return () => clearInterval(intervalId);
     }, []);
-    
 
-    const handleOpenDialog = (response) => {
-        setSelectedResponse(response);
-        setNewResponse(response.response);
+    const handleOpenDialog = (intent) => {
+        setSelectedIntent(intent);
         setOpenDialog(true);
     };
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
-        setSelectedResponse(null);
-        setNewResponse('');
+        setSelectedIntent(null);
     };
 
-    const handleSaveResponse = async () => {
-        if (selectedResponse) {
-            try {
-                await axios.post('https://whatsapp-bot-cocina-oleo-back.onrender.com/api/update-response', {
-                    id: selectedResponse._id,
-                    newResponse
-                });
-                
-                // Actualiza solo la respuesta modificada en el estado local
-                setResponses(prevResponses => {
-                    const updatedResponses = [...prevResponses];
-                    const index = updatedResponses.findIndex(r => r._id === selectedResponse._id);
-                    if (index !== -1) {
-                        updatedResponses[index].response = newResponse;
-                        updatedResponses[index].modifiedAt = Date.now();
-                    }
-                    return updatedResponses;
-                });
-                
-                handleCloseDialog();
-            } catch (error) {
-                console.error('Error updating response:', error.message);
-                alert('Error updating response: ' + error.message);
-            }
+    const handleSaveIntent = async (updatedIntent) => {
+        try {
+            await axios.put(`https://whatsapp-bot-oleo.onrender.com/api/dialogflow/intents/${selectedIntent.id}`, updatedIntent);
+            setIntents(prevIntents => prevIntents.map(intent => intent.id === selectedIntent.id ? updatedIntent : intent));
+            handleCloseDialog();
+        } catch (error) {
+            console.error('Error updating intent:', error.message);
+            alert('Error updating intent: ' + error.message);
         }
     };
 
@@ -83,95 +55,60 @@ const BotComponent = () => {
                 <CircularProgress />
             ) : (
                 <>
-                    <h1>Bot Responses</h1>
-                    <div style={{
-                        width: '400px',
-                        height: '640px',
-                        borderRadius: '30px',
-                        border: '16px solid #333',
-                        backgroundImage: 'url("https://i.redd.it/ts7vuoswhwf41.jpg")',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        flexDirection: 'column'
-                    }}>
-                        <div style={{
-                            backgroundColor: '#555555',
-                            color: '#fff',
-                            padding: '10px',
-                            textAlign: 'center',
-                            fontSize: '18px',
-                            fontWeight: 'bold',
-                            borderBottom: '1px solid #ddd'
-                        }}>
-                            Edit Response Bot
+                    <h1>Dialogflow Intents</h1>
+                    {intents.map((intent, index) => (
+                        <div key={index} style={{ marginBottom: '20px', border: '1px solid #ccc', borderRadius: '5px', padding: '10px' }}>
+                            <h3>{intent.displayName}</h3>
+                            <p><strong>Training Phrases:</strong></p>
+                            <ul>
+                                {intent.trainingPhrases.map((phrase, idx) => (
+                                    <li key={idx}>{phrase}</li>
+                                ))}
+                            </ul>
+                            <p><strong>Response:</strong> {intent.messageTexts.join(', ')}</p>
+                            <button onClick={() => handleOpenDialog(intent)}>Edit</button>
                         </div>
-                        <div style={{
-                            flex: 1,
-                            padding: '10px',
-                            borderTop: '1px solid #ddd',
-                            overflowY: 'auto'
-                        }}>
-                            {responses.map((response, index) => (
-                                <div key={index} style={{
-                                    marginBottom: '10px',
-                                    display: 'flex',
-                                    justifyContent: response.isBot ? 'flex-start' : 'flex-end'
-                                }}>
-                                    <div
-    onClick={() => response.isBot ? handleOpenDialog(response) : null}
-    style={{
-        borderRadius: '10px',
-        padding: '10px',
-        backgroundColor: response.isBot ? '#e0e0e0' : '#25D366',
-        color: response.isBot ? '#000' : '#fff',
-        maxWidth: '70%',
-        minWidth: '20%',
-        wordBreak: 'break-word',
-        cursor: response.isBot ? 'pointer' : 'default',
-        display: 'flex',
-        alignItems: 'center'
-    }}
->
-    {response.isBot && (
-        <EditIcon
-            style={{
-                fontSize: '18px',
-                marginRight: '5px'
-            }}
-        />
-    )}
-    {response.isBot ? response.mensaje : response.opcion}
-</div>
+                    ))}
 
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <Dialog
-                        open={openDialog}
-                        onClose={handleCloseDialog}
-                        fullWidth
-                        maxWidth="md"
-                    >
-                        <DialogTitle>Edit Response</DialogTitle>
+                    <Dialog open={openDialog} onClose={handleCloseDialog}>
+                        <DialogTitle>Edit Intent</DialogTitle>
                         <DialogContent>
                             <TextField
                                 autoFocus
-                                multiline
-                                rows={4}
                                 margin="dense"
-                                id="response"
-                                label="Response"
+                                id="displayName"
+                                label="Display Name"
                                 fullWidth
                                 variant="outlined"
-                                value={newResponse}
-                                onChange={(e) => setNewResponse(e.target.value)}
+                                defaultValue={selectedIntent?.displayName}
+                            />
+                            <TextField
+                                margin="dense"
+                                id="trainingPhrases"
+                                label="Training Phrases (comma-separated)"
+                                fullWidth
+                                variant="outlined"
+                                defaultValue={selectedIntent?.trainingPhrases.join(',')}
+                            />
+                            <TextField
+                                margin="dense"
+                                id="messageTexts"
+                                label="Response Texts (comma-separated)"
+                                fullWidth
+                                variant="outlined"
+                                defaultValue={selectedIntent?.messageTexts.join(',')}
                             />
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleCloseDialog}>Cancel</Button>
-                            <Button onClick={handleSaveResponse}>Save</Button>
+                            <Button onClick={() => {
+                                const updatedIntent = {
+                                    displayName: document.getElementById('displayName').value,
+                                    trainingPhrases: document.getElementById('trainingPhrases').value.split(','),
+                                    messageTexts: document.getElementById('messageTexts').value.split(',')
+                                };
+                                handleSaveIntent(updatedIntent);
+                            }}>Save</Button>
                         </DialogActions>
                     </Dialog>
                 </>

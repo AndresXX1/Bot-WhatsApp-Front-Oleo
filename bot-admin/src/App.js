@@ -1,23 +1,27 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/home';
-import Bot from './components/bot';
-import Calculator from './components/calculator';
+import Pedidos from './components/pedidos';
 import ContactMe from './components/contactMe';
 import AboutUs from './components/aboutUs';
-import Dashboard from './components/dashboard'; // Asegúrate de que la ruta sea correcta
+import Dashboard from './components/dashboard'; 
+import Reservas from './components/reservas'; 
+import PerfilDeUsuario from './components/perfilDeUsuario'; // Importa el componente de perfil
 
 function App() {
     return (
-        <Dashboard>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/bot" element={<Bot />} />
-                <Route path="/calculator" element={<Calculator />} />
-                <Route path="/contact" element={<ContactMe />} />
-                <Route path="/about" element={<AboutUs />} />
-            </Routes>
-        </Dashboard>
+        <Router>
+            <Dashboard>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/pedidos" element={<Pedidos />} />
+                    <Route path="/contact" element={<ContactMe />} />
+                    <Route path="/about" element={<AboutUs />} />
+                    <Route path="/reservas" element={<Reservas />} />
+                    <Route path="/perfil" element={<PerfilDeUsuario />} /> {/* Ruta para el perfil */}
+                </Routes>
+            </Dashboard>
+        </Router>
     );
 }
 

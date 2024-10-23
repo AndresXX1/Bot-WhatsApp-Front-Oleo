@@ -1,55 +1,214 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { CircularProgress } from '@mui/material';
-import { QRCodeCanvas } from 'qrcode.react'; // Cambiamos la importación a QRCodeCanvas
+import { 
+  Container, 
+  Grid, 
+  Paper, 
+  Button, 
+  CircularProgress,
+  Typography, 
+  ThemeProvider, 
+  createTheme, 
+  CssBaseline
+} from '@mui/material';
+import { styled } from '@mui/system';
+import { QRCodeCanvas } from 'qrcode.react';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import EventIcon from '@mui/icons-material/Event';
+import InfoIcon from '@mui/icons-material/Info';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
-const QRCodeComponent = () => {
-    const [qrCode, setQrCode] = useState('');
-    const [loading, setLoading] = useState(true);
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#0a3a3a',
+    },
+    secondary: {
+      main: '#e8c39e',
+    },
+    background: {
+      default: '#0a3a3a',
+      paper: '#1c4e4e',
+    },
+    text: {
+      primary: '#e8c39e',
+      secondary: '#ffffff',
+    },
+  },
+  typography: {
+    fontFamily: 'Arial, sans-serif',
+    h1: {
+      fontSize: '2rem',
+      fontWeight: 700,
+      color: '#e8c39e',
+      '@media (min-width:600px)': { fontSize: '2.5rem' },
+    },
+    h2: {
+      fontSize: '1.2rem',
+      fontWeight: 600,
+      color: '#e8c39e',
+      '@media (min-width:600px)': { fontSize: '1.5rem' },
+    },
+    body1: {
+      color: '#ffffff',
+    },
+  },
+});
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const qrResult = await axios.get('https://whatsapp-bot-cocina-oleo-back.onrender.com/api/get-qr');
-                
-                // Si el QR llega como texto, lo guardamos
-                if (qrResult.data.qrCode) {
-                    setQrCode(qrResult.data.qrCode);
-                } else {
-                    setQrCode('');
-                }
-            } catch (error) {
-                console.error('Error fetching QR code:', error.message);
-                setQrCode('');
-            } finally {
-                setLoading(false);
-            }
-        };
+const FeatureIcon = styled('div')(({ theme }) => ({
+  width: 60,
+  height: 60,
+  borderRadius: '50%',
+  backgroundColor: theme.palette.secondary.main,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginBottom: theme.spacing(2),
+}));
 
-        fetchData();
-        const intervalId = setInterval(fetchData, 50000); // 50 segundos en lugar de 2 segundos
-        return () => clearInterval(intervalId);
-    }, []);
+const Instructions = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  marginRight: theme.spacing(2),
+  textAlign: 'left',
+}));
 
-    return (
-        <div>
-            <h1>QR Code</h1>
-            <div style={{ marginLeft: "200px" }}>
+const Home = () => {
+  const [qrCode, setQrCode] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [connected, setConnected] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const qrResult = await axios.get('https://whatsapp-bot-oleo.onrender.com/api/get-qr');
+        if (qrResult.data.qrCode) {
+          setQrCode(qrResult.data.qrCode);
+        } else {
+          setQrCode('');
+        }
+      } catch (error) {
+        console.error('Error fetching QR code:', error.message);
+        setQrCode('');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+    const intervalId = setInterval(fetchData, 50000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const handleConnectionSuccess = () => {
+    setConnected(true);
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container maxWidth="lg" sx={{ mt: 2, mb: 4 }}>
+        <Typography variant="h1" align='center' sx={{ color: theme.palette.text.primary, mb: 4, mt: 4 }}>
+          Bienvenido a Oleo Bot WhatsApp
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center' }}>
+              <Instructions sx={{ flex: 1 }}>
+                <Typography variant="h2" gutterBottom>
+                  Instrucciones
+                </Typography>
+                <Typography variant="body1" paragraph>
+                  Para configurar Oleo WhatsApp en tu celular, debes hacer lo siguiente:
+                </Typography>
+                <Typography variant="body1" paragraph>
+                  1. Abre WhatsApp en tu teléfono
+                </Typography>
+                <Typography variant="body1" paragraph>
+                  2. Toca menú [icono de tres puntitos verticales] en Android o Ajustes en iPhone.
+                </Typography>
+                <Typography variant="body1" paragraph>
+                  3. Toca dispositivos vinculados y, luego vincular un dispositivo
+                </Typography>
+                <Typography variant="body1" paragraph>
+                  4. Apunta tu teléfono hacia esta pantalla para escanear el código QR
+                </Typography>
+              </Instructions>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
                 {loading ? (
-                    <CircularProgress />
+                  <CircularProgress />
+                ) : connected ? (
+                  <CheckCircleIcon sx={{ fontSize: { xs: 80, md: 100 }, color: theme.palette.secondary.main }} />
+                ) : qrCode ? (
+                  <QRCodeCanvas 
+                    value={qrCode}
+                    size={200}
+                    onClick={handleConnectionSuccess}
+                  />
                 ) : (
-                    <>
-                        {qrCode ? (
-                            <QRCodeCanvas 
-                                value={qrCode} // Usamos el texto recibido para generar el QR
-                                size={300} // Tamaño del QR
-                            />
-                        ) : <p>No QR Code disponible</p>}
-                    </>
+                  <Typography>No hay código QR disponible</Typography>
                 )}
-            </div>
-        </div>
-    );
+              </div>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+              <FeatureIcon>
+                <RestaurantMenuIcon fontSize="large" sx={{ color: theme.palette.primary.main }} />
+              </FeatureIcon>
+              <Typography variant="h2" gutterBottom>
+                Ver Menú
+              </Typography>
+              <Typography>
+                Explora nuestro menú actualizado directamente desde WhatsApp
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+              <FeatureIcon>
+                <EventIcon fontSize="large" sx={{ color: theme.palette.primary.main }} />
+              </FeatureIcon>
+              <Typography variant="h2" gutterBottom>
+                Reservar Mesa
+              </Typography>
+              <Typography>
+                Haz una reserva rápida y fácil a través de nuestro bot
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+              <FeatureIcon>
+                <InfoIcon fontSize="large" sx={{ color: theme.palette.primary.main }} />
+              </FeatureIcon>
+              <Typography variant="h2" gutterBottom>
+                Información
+              </Typography>
+              <Typography>
+                Obtén información sobre horarios, ubicación y eventos especiales
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
+              <Button
+                variant="contained"
+                color="secondary"
+                size="large"
+                startIcon={<WhatsAppIcon />}
+                sx={{ color: theme.palette.primary.main, fontWeight: 'bold' }}
+              >
+                Chatear Ahora
+              </Button>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
+    </ThemeProvider>
+  );
 };
 
-export default QRCodeComponent;
+export default Home;

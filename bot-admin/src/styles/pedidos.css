@@ -1,0 +1,65 @@
+.pedidos-container {
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f9f9f900; /* Color de fondo de la sección */
+    font-family: 'Comic Sans MS', cursive, sans-serif; /* Cambia la fuente a Comic Sans */
+    
+}
+
+.pedidos-title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.table-container {
+    max-height: 400px; /* Altura máxima para mostrar hasta 10 pedidos */
+    overflow-y: auto;  /* Scroll vertical */
+}
+
+.pedidos-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pedidos-table th,
+.pedidos-table td {
+    padding: 12px 15px; /* Espaciado ajustado */
+    text-align: center; /* Centrar texto */
+}
+
+.pedidos-table th {
+    background-color: #407aa9; /* Color de fondo para el encabezado */
+    color: white;
+}
+
+.pedidos-table td {
+    background-color: #cdd4da67; /* Color de fondo para las celdas de valores */
+}
+
+.pedidos-table tr:hover {
+    background-color: #f1f1f1; /* Efecto hover */
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Espacio entre botones */
+}
+
+.edit-input {
+    width: 80%; /* Ajustar el ancho del input */
+    margin: 0 auto; /* Centrar el input */
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 768px) {
+    .pedidos-table th,
+    .pedidos-table td {
+        padding: 8px; /* Espaciado reducido en pantallas pequeñas */
+    }
+    
+    .edit-input {
+        width: 90%; /* Aumentar el ancho en pantallas pequeñas */
+    }
+}
