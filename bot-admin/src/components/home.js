@@ -110,12 +110,32 @@ const Home = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="lg" sx={{ mt: 2, mb: 4 }}>
-        <Typography variant="h1" align='center' sx={{ color: theme.palette.text.primary, mb: 4, mt: 4 }}>
-          Bienvenido a Oleo Bot WhatsApp
-        </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Paper sx={{ p: 2, display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center' }}>
+            <Paper 
+              sx={{ 
+                p: 2, 
+                backgroundColor: 'rgba(28, 78, 78, 0.9)', 
+                mb: 4 
+              }} 
+              elevation={3} // Añade sombra aquí
+            >
+              <Typography variant="h1" align='center' sx={{ color: theme.palette.text.primary }}>
+                Bienvenido a Oleo Bot WhatsApp
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper 
+              sx={{ 
+                p: 2, 
+                display: 'flex', 
+                flexDirection: { xs: 'column', md: 'row' }, 
+                alignItems: 'center',
+                backgroundColor: 'rgba(28, 78, 78, 0.9)' 
+              }} 
+              elevation={3} // Añade sombra aquí
+            >
               <Instructions sx={{ flex: 1 }}>
                 <Typography variant="h2" gutterBottom>
                   Instrucciones
@@ -124,16 +144,16 @@ const Home = () => {
                   Para configurar Oleo WhatsApp en tu celular, debes hacer lo siguiente:
                 </Typography>
                 <Typography variant="body1" paragraph>
-                  1. Abre WhatsApp en tu teléfono
+                  1. Abre WhatsApp en tu teléfono.
                 </Typography>
                 <Typography variant="body1" paragraph>
                   2. Toca menú [icono de tres puntitos verticales] en Android o Ajustes en iPhone.
                 </Typography>
                 <Typography variant="body1" paragraph>
-                  3. Toca dispositivos vinculados y, luego vincular un dispositivo
+                  3. Toca "dispositivos vinculados" y luego "vincular un dispositivo".
                 </Typography>
                 <Typography variant="body1" paragraph>
-                  4. Apunta tu teléfono hacia esta pantalla para escanear el código QR
+                  4. Apunta tu teléfono hacia esta pantalla para escanear el código QR.
                 </Typography>
               </Instructions>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
@@ -154,7 +174,14 @@ const Home = () => {
             </Paper>
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
-            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+            <Paper sx={{ 
+              p: 2, 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center', 
+              height: '100%', 
+              backgroundColor: 'rgba(28, 78, 78, 0.9)' 
+            }} elevation={3}> {/* Añade sombra aquí */}
               <FeatureIcon>
                 <RestaurantMenuIcon fontSize="large" sx={{ color: theme.palette.primary.main }} />
               </FeatureIcon>
@@ -167,7 +194,14 @@ const Home = () => {
             </Paper>
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
-            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+            <Paper sx={{ 
+              p: 2, 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center', 
+              height: '100%', 
+              backgroundColor: 'rgba(28, 78, 78, 0.9)' 
+            }} elevation={3}> {/* Añade sombra aquí */}
               <FeatureIcon>
                 <EventIcon fontSize="large" sx={{ color: theme.palette.primary.main }} />
               </FeatureIcon>
@@ -180,7 +214,14 @@ const Home = () => {
             </Paper>
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
-            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+            <Paper sx={{ 
+              p: 2, 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center', 
+              height: '100%', 
+              backgroundColor: 'rgba(28, 78, 78, 0.9)' 
+            }} elevation={3}> {/* Añade sombra aquí */}
               <FeatureIcon>
                 <InfoIcon fontSize="large" sx={{ color: theme.palette.primary.main }} />
               </FeatureIcon>
@@ -193,7 +234,12 @@ const Home = () => {
             </Paper>
           </Grid>
           <Grid item xs={12}>
-            <Paper sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
+            <Paper sx={{ 
+              p: 2, 
+              display: 'flex', 
+              justifyContent: 'center', 
+              backgroundColor: 'rgba(28, 78, 78, 0.9)' 
+            }} elevation={3}> {/* Añade sombra aquí */}
               <Button
                 variant="contained"
                 color="secondary"

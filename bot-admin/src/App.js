@@ -6,7 +6,8 @@ import ContactMe from './components/contactMe';
 import AboutUs from './components/aboutUs';
 import Dashboard from './components/dashboard'; 
 import Reservas from './components/reservas'; 
-import PerfilDeUsuario from './components/perfilDeUsuario'; // Importa el componente de perfil
+import PerfilDeUsuario from './components/perfilDeUsuario';
+import Estadisticas from "./components/Estadisticas/estadisticas"
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/pedidos" element={<Pedidos />} />
+                    <Route path="/Estadisticas" element={<Estadisticas />} />
                     <Route path="/contact" element={<ContactMe />} />
                     <Route path="/about" element={<AboutUs />} />
                     <Route path="/reservas" element={<Reservas />} />

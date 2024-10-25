@@ -33,37 +33,26 @@ import FunctionsIcon from '@mui/icons-material/Functions';
 import HelpIcon from '@mui/icons-material/Help';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import PerfilDeUsuario from './perfilDeUsuario';
+import Configuraciones from './configuraciones';
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 const theme = createTheme({
     palette: {
-        primary: {
-            main: '#0a3a3a',
-        },
-        secondary: {
-            main: '#e8c39e',
-        },
-        background: {
-            default: '#f5f5f5',
-            paper: '#ffffff',
-        },
-        text: {
-            primary: '#0a3a3a',
-        },
+        primary: { main: '#0a3a3a' },
+        secondary: { main: '#e8c39e' },
+        background: { default: '#f5f5f5', paper: '#ffffff' },
+        text: { primary: '#0a3a3a' },
     },
     typography: {
         fontFamily: 'Arial, sans-serif',
-        h6: {
-            fontWeight: 600,
-        },
-        button: {
-            textTransform: 'none',
-        },
+        h6: { fontWeight: 600 },
+        button: { textTransform: 'none' },
     },
 });
 
 const menuItems = [
     { text: 'Inicio', path: '/', icon: <HomeIcon /> },
-    { text: 'Bot', path: '/bot', icon: <SmartToyIcon /> },
+    { text: 'Estadisticas', path: '/Estadisticas', icon: <BarChartIcon /> },
     { text: 'Pedidos', path: '/pedidos', icon: <ShoppingCartIcon /> },
     { text: 'Reservas', path: '/reservas', icon: <EventIcon /> },
     { text: 'Contáctame', path: '/contact', icon: <ContactMailIcon /> },
@@ -91,6 +80,7 @@ function Dashboard({ children }) {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [profileDialogOpen, setProfileDialogOpen] = useState(false);
+    const [configDialogOpen, setConfigDialogOpen] = useState(false);
     const [isScrolling, setIsScrolling] = useState(false);
     const scrollRef = useRef(null);
 
@@ -109,6 +99,8 @@ function Dashboard({ children }) {
     const handleNavigation = (path) => {
         if (path === '/perfil') {
             setProfileDialogOpen(true);
+        } else if (path === '/configuraciones') {
+            setConfigDialogOpen(true);
         } else {
             window.location.pathname = path;
         }
@@ -118,6 +110,10 @@ function Dashboard({ children }) {
     const handleCloseProfileDialog = () => {
         setProfileDialogOpen(false);
         setIsScrolling(false);
+    };
+
+    const handleCloseConfigDialog = () => {
+        setConfigDialogOpen(false);
     };
 
     const handleScroll = () => {
@@ -139,53 +135,52 @@ function Dashboard({ children }) {
             sx={{ 
                 width: 240, 
                 height: '100%', 
-                backgroundImage: 'url(/log3.webp)', // Imagen de fondo
+                backgroundImage: 'url(/log3s.png)',
                 backgroundSize: 'cover', 
                 backgroundPosition: 'bottom',
-                paddingTop: '40px', // Ajusta la posición hacia abajo
+                paddingTop: '40px',
             }}
         >
- <List>
-    {menuItems.map((item) => (
-        <ListItem 
-            button 
-            key={item.text} 
-            onClick={() => handleNavigation(item.path)}
-            sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.85)', // Fondo semitransparente más opaco
-                borderRadius: '4px',
-                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)', // Sombra
-                '&:hover': {
-                    backgroundColor: 'rgba(0, 0, 0, 0.15)', // Color de fondo en hover más visible
-                },
-            }}
-        >
-            <ListItemIcon sx={{ color: '#0a3a3a' }}>{item.icon}</ListItemIcon>
-            <ListItemText 
-                primary={item.text} 
-                primaryTypographyProps={{ 
-                    style: { 
-                        color: '#0a3a3a', 
-                        textShadow: '1px 1px 2px rgba(255, 255, 255, 0.7)' // Sombra de texto
-                    } 
-                }} 
-            />
-        </ListItem>
-    ))}
-</List>
+            <List>
+                {menuItems.map((item) => (
+                    <ListItem 
+                        button 
+                        key={item.text} 
+                        onClick={() => handleNavigation(item.path)}
+                        sx={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.85)', 
+                            borderRadius: '4px',
+                            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)', 
+                            '&:hover': {
+                                backgroundColor: 'rgba(0, 0, 0, 0.15)', 
+                            },
+                        }}
+                    >
+                        <ListItemIcon sx={{ color: '#0a3a3a' }}>{item.icon}</ListItemIcon>
+                        <ListItemText 
+                            primary={item.text} 
+                            primaryTypographyProps={{ 
+                                style: { 
+                                    color: '#0a3a3a', 
+                                    textShadow: '1px 1px 2px rgba(255, 255, 255, 0.7)' 
+                                } 
+                            }} 
+                        />
+                    </ListItem>
+                ))}
+            </List>
         </Box>
     );
 
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+            <CssBaseline /><Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8, backgroundImage: 'url(/robotillo.jpeg)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh',backgroundAttachment: "fixed" }}>
                 <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                     <Toolbar>
                         <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
                             <MenuIcon />
                         </IconButton>
-                        <Box component="img" src="./logo4.png" alt="Logo" sx={{ height: 90, mr: 2, width: 120 }} /> {/* Logo */}
+                        <Box component="img" src="./logo4.png" alt="Logo" sx={{ height: 90, mr: 2, width: 120 }} />
                         <Typography variant="h6" sx={{ flexGrow: 1, color: 'secondary.main' }}>
                             ÓLEO Bot
                         </Typography>
@@ -235,7 +230,7 @@ function Dashboard({ children }) {
                     {children}
                 </Box>
 
-                {/* Modal para el perfil de usuario */}
+                {/* Diálogo para el perfil de usuario */}
                 <Dialog
                     open={profileDialogOpen}
                     onClose={handleCloseProfileDialog}
@@ -250,7 +245,7 @@ function Dashboard({ children }) {
                         },
                     }}
                 >
-                    <DialogTitle sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.text.primary }}>
+                    <DialogTitle sx={{ backgroundColor: theme.palette.primary.main, color: '#ffffff' }}>
                         Perfil de Usuario
                     </DialogTitle>
                     <ScrollDialogContent
@@ -262,8 +257,36 @@ function Dashboard({ children }) {
                     >
                         <PerfilDeUsuario />
                     </ScrollDialogContent>
-                    <DialogActions sx={{ backgroundColor: theme.palette.secondary.main }}>
-                        <Button onClick={handleCloseProfileDialog} sx={{ color: theme.palette.text.primary }}>
+                    <DialogActions sx={{ backgroundColor: theme.palette.primary.main }}>
+                        <Button onClick={handleCloseProfileDialog} sx={{ color: '#ffffff' }}>
+                            Cerrar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                {/* Diálogo para configuraciones */}
+                <Dialog
+                    open={configDialogOpen}
+                    onClose={handleCloseConfigDialog}
+                    fullWidth
+                    maxWidth="md"
+                    sx={{
+                        '& .MuiDialog-paper': {
+                            backgroundColor: theme.palette.background.default,
+                            boxShadow: 'none',
+                            borderRadius: '8px',
+                            overflow: 'hidden',
+                        },
+                    }}
+                >
+                    <DialogTitle sx={{ backgroundColor: theme.palette.primary.main, color: '#ffffff' }}>
+                        Configuraciones
+                    </DialogTitle>
+                    <DialogContent>
+                        <Configuraciones />
+                    </DialogContent>
+                    <DialogActions sx={{ backgroundColor: theme.palette.primary.main }}>
+                        <Button onClick={handleCloseConfigDialog} sx={{ color: '#ffffff' }}>
                             Cerrar
                         </Button>
                     </DialogActions>
@@ -273,4 +296,4 @@ function Dashboard({ children }) {
     );
 }
 
-export default Dashboard;//gdfgd
+export default Dashboard;
