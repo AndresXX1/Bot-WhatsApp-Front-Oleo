@@ -27,7 +27,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import EventIcon from '@mui/icons-material/Event';
-import ContactMailIcon from '@mui/icons-material/ContactMail';
 import InfoIcon from '@mui/icons-material/Info';
 import FunctionsIcon from '@mui/icons-material/Functions';
 import HelpIcon from '@mui/icons-material/Help';
@@ -35,6 +34,8 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import PerfilDeUsuario from './perfilDeUsuario';
 import Configuraciones from './configuraciones';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import PieDePagina from './pieDePagina';
+import { Link, useLocation } from 'react-router-dom';
 
 const theme = createTheme({
     palette: {
@@ -51,11 +52,10 @@ const theme = createTheme({
 });
 
 const menuItems = [
-    { text: 'Inicio', path: '/', icon: <HomeIcon /> },
-    { text: 'Estadisticas', path: '/Estadisticas', icon: <BarChartIcon /> },
+    { text: 'Inicio', path: '/home', icon: <HomeIcon /> },
+    { text: 'Estadísticas', path: '/Estadisticas', icon: <BarChartIcon /> },
     { text: 'Pedidos', path: '/pedidos', icon: <ShoppingCartIcon /> },
     { text: 'Reservas', path: '/reservas', icon: <EventIcon /> },
-    { text: 'Contáctame', path: '/contact', icon: <ContactMailIcon /> },
     { text: 'Sobre Nosotros', path: '/about', icon: <InfoIcon /> },
 ];
 
@@ -83,6 +83,7 @@ function Dashboard({ children }) {
     const [configDialogOpen, setConfigDialogOpen] = useState(false);
     const [isScrolling, setIsScrolling] = useState(false);
     const scrollRef = useRef(null);
+    const location = useLocation();
 
     const toggleDrawer = () => {
         setDrawerOpen(!drawerOpen);
@@ -174,27 +175,60 @@ function Dashboard({ children }) {
 
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline /><Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8, backgroundImage: 'url(/robotillo.jpeg)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh',backgroundAttachment: "fixed" }}>
-                <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-                    <Toolbar>
-                        <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
-                            <MenuIcon />
-                        </IconButton>
-                        <Box component="img" src="./logo4.png" alt="Logo" sx={{ height: 90, mr: 2, width: 120 }} />
-                        <Typography variant="h6" sx={{ flexGrow: 1, color: 'secondary.main' }}>
-                            ÓLEO Bot
-                        </Typography>
-                        <IconButton color="inherit" onClick={() => handleNavigation("/funciones")}>
-                            <FunctionsIcon />
-                        </IconButton>
-                        <IconButton color="inherit" onClick={() => handleNavigation("/como-usar")} sx={{ ml: 2 }}>
-                            <HelpIcon />
-                        </IconButton>
-                        <IconButton color="inherit" onClick={handleUserMenuClick} sx={{ ml: 2 }}>
-                            <AccountCircle />
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
+            <CssBaseline />
+            <Box 
+                component="main" 
+                sx={{ 
+                    flexGrow: 1, 
+                    p: 3, 
+                    mt: location.pathname === '/' || location.pathname === "/register" ? 0 : 8, // No margen superior si la ruta es "/"
+                    backgroundImage: 'url(/robotillo.jpeg)', 
+                    backgroundSize: 'cover', 
+                    backgroundPosition: 'center', 
+                    minHeight: '100vh', 
+                    backgroundAttachment: "fixed" 
+                }}
+            >
+                {location.pathname !== '/' && location.pathname !== '/register' && ( // Renderiza solo si no estamos en "/"
+                    <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+                        <Toolbar sx={{ minHeight: 64 }}>
+                            <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
+                                <MenuIcon />
+                            </IconButton>
+                            <Link to="/home" style={{ textDecoration: 'none' }}>
+                                <Box 
+                                    component="img" 
+                                    src="./logo20.png" 
+                                    alt="Logo" 
+                                    sx={{ 
+                                        height: '100%',
+                                        width: 'auto',
+                                        maxHeight: 90,
+                                        mr: 2,
+                                        '&:hover': {
+                                            opacity: 0.8,
+                                        },
+                                        cursor: 'pointer',
+                                        transition: 'opacity 0.3s ease',
+                                        display: 'block',
+                                    }} 
+                                />
+                            </Link>
+                            <Typography variant="h6" sx={{ flexGrow: 1, color: 'secondary.main' }}>
+                                Oleo BOT
+                            </Typography>
+                            <IconButton color="inherit" onClick={() => handleNavigation("/funciones")}>
+                                <FunctionsIcon />
+                            </IconButton>
+                            <IconButton color="inherit" onClick={() => handleNavigation("/como-usar")} sx={{ ml: 2 }}>
+                                <HelpIcon />
+                            </IconButton>
+                            <IconButton color="inherit" onClick={handleUserMenuClick} sx={{ ml: 2 }}>
+                                <AccountCircle />
+                            </IconButton>
+                        </Toolbar>
+                    </AppBar>
+                )}
 
                 <Drawer
                     variant="temporary"
@@ -292,6 +326,7 @@ function Dashboard({ children }) {
                     </DialogActions>
                 </Dialog>
             </Box>
+            <PieDePagina />
         </ThemeProvider>
     );
 }

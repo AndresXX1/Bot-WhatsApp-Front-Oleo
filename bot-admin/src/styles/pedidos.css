@@ -4,7 +4,7 @@
     border-radius: 10px;
     background-color: #f9f9f900; /* Color de fondo de la sección */
     font-family: 'Comic Sans MS', cursive, sans-serif; /* Cambia la fuente a Comic Sans */
-    
+    margin-top: -60px;
 }
 
 .pedidos-title {
@@ -15,6 +15,7 @@
 .table-container {
     max-height: 400px; /* Altura máxima para mostrar hasta 10 pedidos */
     overflow-y: auto;  /* Scroll vertical */
+    background-color: rgba(255, 255, 255, 0.7); /* Añadido para mejorar la visibilidad */
 }
 
 .pedidos-table {
@@ -29,16 +30,19 @@
 }
 
 .pedidos-table th {
-    background-color: #407aa9; /* Color de fondo para el encabezado */
+    background-color: #0a3a3a; /* Color de fondo para el encabezado */
     color: white;
+    position: sticky; /* Hacer que el encabezado se quede fijo */
+    top: 0; /* Fijar en la parte superior */
+    z-index: 1; /* Asegurarse de que esté encima de otras celdas */
 }
 
 .pedidos-table td {
-    background-color: #cdd4da67; /* Color de fondo para las celdas de valores */
+    background-color: #cdd4dab7; /* Color de fondo para las celdas de valores */
 }
 
 .pedidos-table tr:hover {
-    background-color: #f1f1f1; /* Efecto hover */
+    background-color: #f1f1f1b3; /* Efecto hover */
 }
 
 .actions {

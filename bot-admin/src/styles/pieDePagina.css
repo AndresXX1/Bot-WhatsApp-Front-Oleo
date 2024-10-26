@@ -1,0 +1,35 @@
+.footer {
+    background-color: #0a3a3a; /* Color de fondo con un poco de transparencia */
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.social-icons {
+    margin-top: 10px;
+    display: flex; /* Flex para alinear íconos */
+}
+
+.social-icons a {
+    margin: 0 10px;
+    color: white;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+    }
+
+    .social-icons {
+        flex-direction: row;
+        justify-content: center;
+    }
+}

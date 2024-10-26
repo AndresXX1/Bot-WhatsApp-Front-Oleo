@@ -1,0 +1,55 @@
+.about-us-container {
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column; /* Asegura que el contenido se apile verticalmente */
+    align-items: center; /* Centrar horizontalmente */
+}
+
+.about-card {
+    background: rgba(226, 197, 197, 0.622);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 24px;
+    width: 100%;
+    max-width: 700px; /* Aumentar el tamaño máximo */
+}
+
+.avatar {
+    width: 250px; /* Aumentar tamaño de la imagen */
+    height: 250px; /* Aumentar tamaño de la imagen */
+    margin: 20px auto; /* Centrar el avatar */
+}
+
+.name-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 16px 0;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.icon-button {
+    margin: 0 12px; /* Espaciado entre botones */
+    color: inherit; /* Mantener el color del texto */
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 768px) {
+    .about-card {
+        padding: 16px;
+    }
+
+    .name-title {
+        font-size: 1.5rem;
+    }
+
+    .avatar {
+        width: 200px; /* Ajustar tamaño en pantallas pequeñas */
+        height: 200px; /* Ajustar tamaño en pantallas pequeñas */
+    }
+}

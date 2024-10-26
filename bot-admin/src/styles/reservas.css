@@ -4,6 +4,8 @@
     border-radius: 10px;
     background-color: #f9f9f900; /* Color de fondo de la sección */
     font-family: 'Comic Sans MS', cursive, sans-serif; /* Cambia la fuente a Comic Sans */
+    margin-top: -60px;
+
 }
 
 .reservas-title {
@@ -14,6 +16,26 @@
 .table-container {
     max-height: 400px; /* Altura máxima para mostrar hasta 10 reservas */
     overflow-y: auto;  /* Scroll vertical */
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+/* Estilos para la barra de desplazamiento */
+.table-container::-webkit-scrollbar {
+    width: 8px; /* Ancho de la barra de desplazamiento */
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.5); /* Color de fondo de la pista */
+    border-radius: 10px; /* Esquinas redondeadas */
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.7); /* Color del pulgar (parte que se mueve) */
+    border-radius: 10px; /* Esquinas redondeadas */
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 1); /* Color del pulgar al pasar el mouse */
 }
 
 .reservas-table {
@@ -25,19 +47,33 @@
 .reservas-table td {
     padding: 12px 15px; /* Espaciado ajustado */
     text-align: center; /* Centrar texto */
+    background-color: rgba(255, 255, 255, 0.2); /* Color de fondo para las celdas de valores */
 }
 
 .reservas-table th {
-    background-color: #407aa9; /* Color de fondo para el encabezado */
-    color: white;
+    background-color: #0a3a3a; /* Color de fondo para el encabezado */
+    color: white; /* Color del texto en el encabezado */
+    position: sticky; /* Hacer que el encabezado se quede fijo */
+    top: 0; /* Fijar en la parte superior */
+    z-index: 1; /* Asegurarse de que esté encima de otras celdas */
 }
 
 .reservas-table td {
-    background-color: #cdd4da67; /* Color de fondo para las celdas de valores */
+    background-color: rgba(205, 212, 218, 0.6); /* Color de fondo para las celdas de valores (transparente) */
+    transition: background-color 0.3s; /* Transición suave para el hover */
 }
 
-.reservas-table tr:hover {
-    background-color: #f1f1f1; /* Efecto hover */
+/* Líneas que dividen horizontalmente las filas */
+.reservas-table tr {
+    border-bottom: 1px solid black; /* Línea horizontal negra */
+}
+
+.reservas-table tr:last-child {
+    border-bottom: none; /* Quitar la línea en la última fila */
+}
+
+.reservas-table tr:hover td {
+    background-color: rgba(241, 241, 241, 0.7); /* Efecto hover en celdas */
 }
 
 .actions {
@@ -47,7 +83,7 @@
 }
 
 .edit-input {
-    width: 90%; /* Ajustar el ancho del input */
+    width: 80%; /* Ajustar el ancho del input */
     margin: 0 auto; /* Centrar el input */
 }
 

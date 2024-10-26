@@ -8,13 +8,17 @@ import Dashboard from './components/dashboard';
 import Reservas from './components/reservas'; 
 import PerfilDeUsuario from './components/perfilDeUsuario';
 import Estadisticas from "./components/Estadisticas/estadisticas"
+import LandingPage from "./components/landing"
+
 
 function App() {
     return (
         <Router>
             <Dashboard>
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                <Route path="/" element={<LandingPage />} />
+                    <Route path="/home" element={<Home />} />
+                   
                     <Route path="/pedidos" element={<Pedidos />} />
                     <Route path="/Estadisticas" element={<Estadisticas />} />
                     <Route path="/contact" element={<ContactMe />} />

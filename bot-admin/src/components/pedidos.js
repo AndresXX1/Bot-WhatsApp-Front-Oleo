@@ -94,16 +94,24 @@ const Pedidos = () => {
         }));
     };
 
-    if (loading) return <Typography variant="h6">Cargando pedidos...</Typography>;
+    if (loading) return <Typography variant="h6" style={{ marginBottom: "20px", color: '#e8c39e' }}>Cargando pedidos...</Typography>;
     if (error) return <Typography variant="h6" color="error">{error}</Typography>;
 
     return (
         <div className="pedidos-container">
-            <Typography variant="h4" style={{marginBottom:"20px"}}>Pedidos</Typography>
-            <TableContainer component={Paper} className="table-container">
+            <Typography 
+                variant="h4" 
+                style={{ 
+                    marginBottom: "20px", 
+                    color: '#e8c39e' // Aplica el color amarillo aquí
+                }}
+            >
+                Pedidos
+            </Typography>
+            <TableContainer component={Paper} sx={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: 2 }}>
                 <Table className="pedidos-table">
                     <TableHead>
-                        <TableRow>
+                        <TableRow sx={{ backgroundColor: '#0a3a3a', color: '#ffffff' }}>
                             <TableCell align="center">Nombre</TableCell>
                             <TableCell align="center">Apellido</TableCell>
                             <TableCell align="center">Pedido</TableCell>
@@ -120,7 +128,7 @@ const Pedidos = () => {
                                 <TableCell align="center">
                                     {editablePedido === pedido._id ? (
                                         <TextField
-                                            style={{ width: '120px' }} // Aumentado a 170px
+                                            style={{ width: '120px' }}
                                             value={editablePedidoValues[pedido._id]?.nombre || ''}
                                             onChange={(e) => handleInputChange(pedido._id, 'nombre', e.target.value)}
                                         />
@@ -131,7 +139,7 @@ const Pedidos = () => {
                                 <TableCell align="center">
                                     {editablePedido === pedido._id ? (
                                         <TextField
-                                            style={{ width: '120px' }} // Aumentado a 170px
+                                            style={{ width: '120px' }}
                                             value={editablePedidoValues[pedido._id]?.apellido || ''}
                                             onChange={(e) => handleInputChange(pedido._id, 'apellido', e.target.value)}
                                         />
@@ -142,7 +150,7 @@ const Pedidos = () => {
                                 <TableCell align="center">
                                     {editablePedido === pedido._id ? (
                                         <TextField
-                                            style={{ width: '120px' }} // Aumentado a 170px
+                                            style={{ width: '120px' }}
                                             value={editablePedidoValues[pedido._id]?.pedido || ''}
                                             onChange={(e) => handleInputChange(pedido._id, 'pedido', e.target.value)}
                                         />
@@ -151,28 +159,27 @@ const Pedidos = () => {
                                     )}
                                 </TableCell>
                                 <TableCell align="center">
-                                  {editablePedido === pedido._id ? (
-                                      <FormControl fullWidth>
-                                          <InputLabel id={`metodo-entrega-label-${pedido._id}`}>Método de Entrega</InputLabel>
-                                          <Select
-                                              style={{ width: '120px' }} // Ancho consistente
-                                              labelId={`metodo-entrega-label-${pedido._id}`}
-                                              value={editablePedidoValues[pedido._id]?.metodo_entrega || pedido.metodo_entrega} // Verifica el valor
-                                              onChange={(e) => handleInputChange(pedido._id, 'metodo_entrega', e.target.value)}
-                                          >
-                                              <MenuItem value="delivery">Delivery</MenuItem>
-                                              <MenuItem value="recogida">Recogida</MenuItem>
-                                          </Select>
-                                      </FormControl>
-                                  ) : (
-                                      pedido.metodo_entrega
-                                  )}
-                              </TableCell>
-
+                                    {editablePedido === pedido._id ? (
+                                        <FormControl fullWidth>
+                                            <InputLabel id={`metodo-entrega-label-${pedido._id}`}>Método de Entrega</InputLabel>
+                                            <Select
+                                                style={{ width: '120px' }}
+                                                labelId={`metodo-entrega-label-${pedido._id}`}
+                                                value={editablePedidoValues[pedido._id]?.metodo_entrega || pedido.metodo_entrega}
+                                                onChange={(e) => handleInputChange(pedido._id, 'metodo_entrega', e.target.value)}
+                                            >
+                                                <MenuItem value="delivery">Delivery</MenuItem>
+                                                <MenuItem value="recogida">Recogida</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    ) : (
+                                        pedido.metodo_entrega
+                                    )}
+                                </TableCell>
                                 <TableCell align="center">
                                     {editablePedido === pedido._id ? (
                                         <TextField
-                                            style={{ width: '90px' }} // Aumentado a 170px
+                                            style={{ width: '90px' }}
                                             value={editablePedidoValues[pedido._id]?.direccion || ''}
                                             onChange={(e) => handleInputChange(pedido._id, 'direccion', e.target.value)}
                                         />
@@ -181,29 +188,29 @@ const Pedidos = () => {
                                     )}
                                 </TableCell>
                                 <TableCell align="center">
-    {editablePedido === pedido._id ? (
-        <FormControl fullWidth>
-            <InputLabel id={`metodo-pago-label-${pedido._id}`}>Método de Pago</InputLabel>
-            <Select
-                style={{ width: '120px' }} // Ancho consistente
-                labelId={`metodo-pago-label-${pedido._id}`}
-                value={editablePedidoValues[pedido._id]?.metodo_pago || pedido.metodo_pago} // Verifica el valor
-                onChange={(e) => handleInputChange(pedido._id, 'metodo_pago', e.target.value)}
-            >
-                <MenuItem value="efectivo">Efectivo</MenuItem>
-                <MenuItem value="tarjeta">Tarjeta</MenuItem>
-            </Select>
-        </FormControl>
-    ) : (
-        pedido.metodo_pago
-    )}
-</TableCell>
+                                    {editablePedido === pedido._id ? (
+                                        <FormControl fullWidth>
+                                            <InputLabel id={`metodo-pago-label-${pedido._id}`}>Método de Pago</InputLabel>
+                                            <Select
+                                                style={{ width: '120px' }}
+                                                labelId={`metodo-pago-label-${pedido._id}`}
+                                                value={editablePedidoValues[pedido._id]?.metodo_pago || pedido.metodo_pago}
+                                                onChange={(e) => handleInputChange(pedido._id, 'metodo_pago', e.target.value)}
+                                            >
+                                                <MenuItem value="efectivo">Efectivo</MenuItem>
+                                                <MenuItem value="tarjeta">Tarjeta</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    ) : (
+                                        pedido.metodo_pago
+                                    )}
+                                </TableCell>
                                 <TableCell align="center">
                                     {editablePedido === pedido._id ? (
                                         <FormControl fullWidth>
                                             <InputLabel id={`estado-label-${pedido._id}`}>Estado</InputLabel>
                                             <Select
-                                                style={{ width: '120px' }} // Aumentado a 170px
+                                                style={{ width: '120px' }}
                                                 labelId={`estado-label-${pedido._id}`}
                                                 value={editablePedidoValues[pedido._id]?.estado || ''}
                                                 onChange={(e) => handleInputChange(pedido._id, 'estado', e.target.value)}
@@ -218,20 +225,20 @@ const Pedidos = () => {
                                     )}
                                 </TableCell>
                                 <TableCell align="center">
-    <div className="actions">
-        {editablePedido === pedido._id ? (
-            <>
-                <Button onClick={() => handleCancel()} ><CancelIcon /></Button>
-                <Button onClick={() => handleSave(pedido._id)} ><SaveIcon /></Button>
-            </>
-        ) : (
-            <>
-                <Button onClick={() => handleEdit(pedido._id)} ><EditIcon /></Button>
-                <Button onClick={() => handleDelete(pedido._id)} ><DeleteIcon /></Button>
-            </>
-        )}
-    </div>
-</TableCell>
+                                    <div className="actions">
+                                        {editablePedido === pedido._id ? (
+                                            <>
+                                                <Button onClick={() => handleCancel()}><CancelIcon /></Button>
+                                                <Button onClick={() => handleSave(pedido._id)}><SaveIcon /></Button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Button onClick={() => handleEdit(pedido._id)}><EditIcon /></Button>
+                                                <Button onClick={() => handleDelete(pedido._id)}><DeleteIcon /></Button>
+                                            </>
+                                        )}
+                                    </div>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

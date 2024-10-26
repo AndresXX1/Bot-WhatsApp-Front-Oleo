@@ -94,13 +94,18 @@ const Reservas = () => {
         }));
     };
 
-    if (loading) return <Typography variant="h6">Cargando reservas...</Typography>;
+    if (loading) return <Typography variant="h6" style={{ marginBottom: "20px", color: '#e8c39e' }}>Cargando reservas...</Typography>;
     if (error) return <Typography variant="h6" color="error">{error}</Typography>;
 
     return (
         <div className="reservas-container">
-            <Typography variant="h4" style={{marginBottom:"20px"}}>Reservas</Typography>
-            <TableContainer component={Paper} className="table-container">
+            <Typography 
+                variant="h4" 
+                style={{ marginBottom: "20px", color: '#e8c39e' }} // Aplica el color amarillo aquí
+            >
+                Reservas
+            </Typography>
+            <TableContainer component={Paper} className="table-container" sx={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: 2 }}>
                 <Table className="reservas-table">
                     <TableHead>
                         <TableRow>
