@@ -47,7 +47,7 @@
 .reservas-table td {
     padding: 12px 15px; /* Espaciado ajustado */
     text-align: center; /* Centrar texto */
-    background-color: rgba(255, 255, 255, 0.2); /* Color de fondo para las celdas de valores */
+    background-color: rgba(235, 227, 227, 0.708); /* Color de fondo para las celdas de valores */
 }
 
 .reservas-table th {

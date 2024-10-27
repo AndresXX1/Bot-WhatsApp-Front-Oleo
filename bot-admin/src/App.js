@@ -9,10 +9,12 @@ import Reservas from './components/reservas';
 import PerfilDeUsuario from './components/perfilDeUsuario';
 import Estadisticas from "./components/Estadisticas/estadisticas"
 import LandingPage from "./components/landing"
+import { UserProvider } from './components/context/UserContext';
 
 
 function App() {
     return (
+        <UserProvider>
         <Router>
             <Dashboard>
                 <Routes>
@@ -28,6 +30,7 @@ function App() {
                 </Routes>
             </Dashboard>
         </Router>
+        </UserProvider>
     );
 }
 

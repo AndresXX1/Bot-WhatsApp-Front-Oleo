@@ -12,9 +12,11 @@ import EyeOutline from 'mdi-material-ui/EyeOutline';
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline';
 import { toast, ToastContainer } from 'react-toastify';
 import FormHelperText from '@mui/material/FormHelperText';
+import { useUserContext } from '../components/context/UserContext'; 
 import 'react-toastify/dist/ReactToastify.css';
 
-const RegisterPage = ({ onShowLogin }) => {
+const RegisterPage = () => {
+  const { togglePage } = useUserContext();
   const [values, setValues] = useState({
     password: '',
     showPassword: false,
@@ -31,6 +33,8 @@ const RegisterPage = ({ onShowLogin }) => {
     phone: '',
     password: '',
   });
+
+  const [showTooltip, setShowTooltip] = useState(false); // Estado para manejar la biñeta
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
@@ -59,7 +63,8 @@ const RegisterPage = ({ onShowLogin }) => {
     }
   };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
     const newErrors = {
       name: validateField('name', values.name),
       lastName: validateField('lastName', values.lastName),
@@ -86,6 +91,21 @@ const RegisterPage = ({ onShowLogin }) => {
     }
   };
 
+  const handleTogglePage = () => {
+    togglePage(); // Cambia a la página de inicio de sesión
+  };
+
+  const handleTooltip = () => {
+    setShowTooltip(true); // Muestra la biñeta
+    // Oculta la biñeta después de 3 segundos
+  };
+
+  const handleClick = () => {
+    handleTooltip(); // Muestra la biñeta
+    togglePage(); // Cambia a la página de inicio de sesión inmediatamente
+  };
+
+
   return (
     <Box
       sx={{
@@ -98,19 +118,42 @@ const RegisterPage = ({ onShowLogin }) => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundImage: 'url(/robotillo.jpeg)', // Imagen de fondo
+        backgroundImage: 'url(/robotillo.jpeg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         padding: 2,
         zIndex: 1,
+        
       }}
     >
-      <Box sx={{ width: '100%', maxWidth: '400px', backgroundColor: 'rgba(255, 255, 255, 0.8)', padding: 4, borderRadius: 2 }}>
-        <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-          Comienza la aventura! 🚀
-        </Typography>
-        <Typography variant='body2'>¡Haz que la gestión de tu aplicación sea fácil y divertida!</Typography>
-        <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
+      <Box
+        sx={{
+          width: '100%',
+          maxHeight:"700px",
+          maxWidth: '420px',
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          padding: 4,
+          borderRadius: 2,
+          minHeight: '600px', // Altura máxima del contenedor
+          overflowY: 'auto', // Scroll vertical si el contenido excede la altura
+          '&::-webkit-scrollbar': {
+            width: '6px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'black', // Color del scrollbar
+            borderRadius: '10px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'transparent',
+          },
+        }}
+      >
+        <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5, marginBottom:"25px" }}>
+          Crea tu cuenta y comienza la aventura! 🚀
+      
+</Typography>
+      
+        <form noValidate autoComplete='off' onSubmit={handleFormSubmit}>
           <TextField
             fullWidth
             label='Nombre de usuario'
@@ -173,25 +216,53 @@ const RegisterPage = ({ onShowLogin }) => {
             fullWidth
             size='large'
             variant='contained'
-            onClick={handleFormSubmit}
+            type="submit"
           >
             Regístrate
           </Button>
+       
         </form>
-        <Typography variant='body2' sx={{ marginRight: 2 }}>
-          Ya tienes cuenta?
-        </Typography>
-        <Typography
-          component="span"
-          style={{ fontSize: "20px", color: "green", cursor: "pointer" }}
-          onClick={onShowLogin} // Cambiar el estado para mostrar el login
-        >
-          Inicia sesión!
-        </Typography>
+       
+        <Box sx={{ position: 'relative',marginTop:"20px" }}>
+          <Typography variant='body3'>¿Ya tienes cuenta?</Typography>
+          <Typography onClick={handleClick} style={{ fontSize: "20px", color: "green", cursor: "pointer", marginLeft:"150px", marginTop:"-26px" }}>
+            Inicia sesión
+          </Typography>
+          {showTooltip && (
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '-20px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                backgroundColor: 'white', // Fondo blanco transparente
+                padding: '10px 15px',
+                borderRadius: '12px',
+                border: '2px solid red', // Bordes rojos
+                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.9)',
+                zIndex: 10,
+                transition: 'transform 0.3s ease',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                width: { xs: '90%', sm: '300px' },
+                maxWidth: '200px',
+                marginLeft: '-100px',
+                '&:hover': {
+                  transform: 'translateX(-50%) translateY(-5px)', // Efecto al pasar el mouse
+                },
+              }}
+            >
+              <Typography variant='caption'>¡Haz clic nuevamente para volver a iniciar sesión!</Typography>
+            </Box>
+          )}
+        </Box>
       </Box>
       <ToastContainer />
     </Box>
   );
+  
 };
 
 export default RegisterPage;

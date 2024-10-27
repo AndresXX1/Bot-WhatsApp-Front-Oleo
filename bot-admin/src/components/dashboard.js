@@ -21,6 +21,7 @@ import {
     DialogActions,
     Button,
     styled,
+    Tooltip
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
@@ -153,8 +154,9 @@ function Dashboard({ children }) {
                             borderRadius: '4px',
                             boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)', 
                             '&:hover': {
-                                backgroundColor: 'rgba(0, 0, 0, 0.15)', 
+                                backgroundColor: 'rgba(10, 58, 58, 0.5)', // Verde oscuro más transparente
                             },
+                            cursor: 'pointer', // Cambia el cursor al pasar el mouse
                         }}
                     >
                         <ListItemIcon sx={{ color: '#0a3a3a' }}>{item.icon}</ListItemIcon>
@@ -172,6 +174,7 @@ function Dashboard({ children }) {
             </List>
         </Box>
     );
+    
 
     return (
         <ThemeProvider theme={theme}>
@@ -191,43 +194,82 @@ function Dashboard({ children }) {
             >
                 {location.pathname !== '/' && location.pathname !== '/register' && ( // Renderiza solo si no estamos en "/"
                     <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-                        <Toolbar sx={{ minHeight: 64 }}>
-                            <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
-                                <MenuIcon />
-                            </IconButton>
-                            <Link to="/home" style={{ textDecoration: 'none' }}>
-                                <Box 
-                                    component="img" 
-                                    src="./logo20.png" 
-                                    alt="Logo" 
-                                    sx={{ 
-                                        height: '100%',
-                                        width: 'auto',
-                                        maxHeight: 90,
-                                        mr: 2,
-                                        '&:hover': {
-                                            opacity: 0.8,
-                                        },
-                                        cursor: 'pointer',
-                                        transition: 'opacity 0.3s ease',
-                                        display: 'block',
-                                    }} 
-                                />
-                            </Link>
-                            <Typography variant="h6" sx={{ flexGrow: 1, color: 'secondary.main' }}>
-                                Oleo BOT
-                            </Typography>
-                            <IconButton color="inherit" onClick={() => handleNavigation("/funciones")}>
-                                <FunctionsIcon />
-                            </IconButton>
-                            <IconButton color="inherit" onClick={() => handleNavigation("/como-usar")} sx={{ ml: 2 }}>
-                                <HelpIcon />
-                            </IconButton>
-                            <IconButton color="inherit" onClick={handleUserMenuClick} sx={{ ml: 2 }}>
-                                <AccountCircle />
-                            </IconButton>
-                        </Toolbar>
-                    </AppBar>
+    <Toolbar sx={{ minHeight: 64 }}>
+        <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
+            <MenuIcon />
+        </IconButton>
+        <Link to="/home" style={{ textDecoration: 'none' }}>
+            <Box 
+                component="img" 
+                src="./logo20.png" 
+                alt="Logo" 
+                sx={{ 
+                    height: '100%',
+                    width: 'auto',
+                    maxHeight: 90,
+                    mr: 2,
+                    '&:hover': {
+                        opacity: 0.8,
+                        transform: 'scale(1.1)', // Aumenta el tamaño al 110%
+                    },
+                    cursor: 'pointer',
+                    transition: 'opacity 0.3s ease, transform 0.3s ease', // Añade la transición para el transform
+                    display: 'block',
+                }} 
+            />
+        </Link>
+
+        <Typography variant="h6" sx={{ flexGrow: 1, color: 'secondary.main' }}>
+            Oleo BOT
+        </Typography>
+         <Tooltip title="Conoce todas las funciones de Oleo-Bot">
+        <IconButton 
+       
+            color="inherit" 
+            onClick={() => handleNavigation("/funciones")} 
+            sx={{
+                '&:hover': {
+                    transform: 'scale(1.5)', // Aumenta el tamaño al 110%
+                    transition: 'transform 0.3s ease', // Añade la transición
+                },
+            }}
+        >
+            <FunctionsIcon />
+        </IconButton>
+        </Tooltip>
+        <Tooltip title="Como usar Oleo-Bot">
+        <IconButton 
+            color="inherit" 
+            onClick={() => handleNavigation("/como-usar")} 
+            sx={{ 
+                ml: 2,
+                '&:hover': {
+                    transform: 'scale(1.5)', // Aumenta el tamaño al 110%
+                    transition: 'transform 0.3s ease', // Añade la transición
+                },
+            }}
+        >
+            <HelpIcon />
+        </IconButton>
+        </Tooltip>
+        <Tooltip title="Perfil de Usuario">
+        <IconButton 
+            color="inherit" 
+            onClick={handleUserMenuClick} 
+            sx={{ 
+                ml: 2,
+                '&:hover': {
+                    transform: 'scale(1.5)', // Aumenta el tamaño al 110%
+                    transition: 'transform 0.3s ease', // Añade la transición
+                },
+            }}
+        >
+            <AccountCircle />
+        </IconButton>
+        </Tooltip>
+    </Toolbar>
+</AppBar>
+
                 )}
 
                 <Drawer

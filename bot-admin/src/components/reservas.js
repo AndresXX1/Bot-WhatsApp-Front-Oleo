@@ -105,7 +105,7 @@ const Reservas = () => {
             >
                 Reservas
             </Typography>
-            <TableContainer component={Paper} className="table-container" sx={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: 2 }}>
+            <TableContainer component={Paper} className="table-container" sx={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', borderRadius: 2 }}>
                 <Table className="reservas-table">
                     <TableHead>
                         <TableRow>

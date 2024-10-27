@@ -108,7 +108,7 @@ const Pedidos = () => {
             >
                 Pedidos
             </Typography>
-            <TableContainer component={Paper} sx={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: 2 }}>
+            <TableContainer component={Paper} sx={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', borderRadius: 2 }}>
                 <Table className="pedidos-table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: '#0a3a3a', color: '#ffffff' }}>

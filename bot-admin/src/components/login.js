@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import RegisterPage from './register'; // Asegúrate de que la ruta sea correcta
-
-// ** MUI Components
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -15,8 +13,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-// ** Icons Imports
+import FormHelperText from '@mui/material/FormHelperText';
 import EyeOutline from 'mdi-material-ui/EyeOutline';
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline';
 
@@ -26,7 +23,11 @@ const LoginPage = () => {
     password: '',
     showPassword: false,
   });
-  const [showRegister, setShowRegister] = useState(false); // Estado para controlar la vista de registro
+  const [errors, setErrors] = useState({
+    email: '',
+    password: '',
+  });
+  const [showRegister, setShowRegister] = useState(false);
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -40,9 +41,26 @@ const LoginPage = () => {
     event.preventDefault();
   };
 
+  const validateFields = () => {
+    const newErrors = {
+      email: values.email ? '' : 'El email es obligatorio',
+      password: values.password ? '' : 'La contraseña es obligatoria',
+    };
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === '');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí agregar la lógica de inicio de sesión
+    if (!validateFields()) {
+      toast.error('Por favor completa todos los campos correctamente.', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    // Lógica de inicio de sesión
     try {
       localStorage.setItem('authToken', 'tu_token_aqui'); // Guardar token simulado
       toast.success('¡Inicio de sesión exitoso!', {
@@ -59,7 +77,7 @@ const LoginPage = () => {
   };
 
   if (showRegister) {
-    return <RegisterPage />; // Mostrar el componente de registro si el estado es true
+    return <RegisterPage />;
   }
 
   return (
@@ -74,7 +92,7 @@ const LoginPage = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundImage: 'url(/robotillo.jpeg)', // Imagen de fondo
+        backgroundImage: 'url(/robotillo.jpeg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         padding: 2,
@@ -84,8 +102,19 @@ const LoginPage = () => {
       <ToastContainer />
       <Box sx={{ width: '100%', maxWidth: '400px', backgroundColor: 'rgba(255, 255, 255, 0.8)', padding: 4, borderRadius: 2 }}>
         <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-          Bienvenidos a la plataforma 👋🏻
+          Bienvenidos a Oleo Bot 👋🏻
         </Typography>
+        <Box
+          component="img"
+          src="./logo20.png"
+          alt="Descripción de la imagen"
+          sx={{
+            width: "120px",
+            height: "120px",
+            display: 'block',
+            margin: '0 auto',
+          }}
+        />
         <form noValidate onSubmit={handleSubmit}>
           <TextField
             autoFocus
@@ -95,8 +124,10 @@ const LoginPage = () => {
             sx={{ marginBottom: 2 }}
             value={values.email}
             onChange={handleChange('email')}
+            error={Boolean(errors.email)}
+            helperText={errors.email}
           />
-          <FormControl fullWidth sx={{ marginBottom: 2 }}>
+          <FormControl fullWidth sx={{ marginBottom: 2 }} error={Boolean(errors.password)}>
             <InputLabel htmlFor='auth-login-password'>Contraseña</InputLabel>
             <OutlinedInput
               label='Contraseña'
@@ -117,6 +148,7 @@ const LoginPage = () => {
                 </InputAdornment>
               }
             />
+            <FormHelperText>{errors.password}</FormHelperText>
           </FormControl>
           <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}>
             <MuiFormControlLabel control={<Checkbox />} label='Guardar datos de inicio de sesión' />
@@ -140,7 +172,7 @@ const LoginPage = () => {
             <Typography
               component="span"
               style={{ fontSize: "20px", color: "green", cursor: "pointer" }}
-              onClick={() => setShowRegister(true)} // Cambiar el estado para mostrar el registro
+              onClick={() => setShowRegister(true)}
             >
               Regístrate!
             </Typography>

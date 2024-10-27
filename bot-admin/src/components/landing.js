@@ -1,53 +1,28 @@
-import { useState } from 'react';
-import LoginPage from './login'; // Ajusta la ruta según tu estructura
-import RegisterPage from './register'; // Ajusta la ruta según tu estructura
+import React from 'react';
+import { useUserContext } from './context/UserContext'; // Importa el hook
+import LoginPage from './login';
+import RegisterPage from './register';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 const LandingPage = () => {
-  const [showRegister, setShowRegister] = useState(false);
-
-  const toggleRegister = () => {
-    setShowRegister(prev => !prev);
-  };
+  const { isRegister, togglePage } = useUserContext(); // Usa el hook
 
   return (
-    <Box
-    //   sx={{
-    //     display: 'flex',
-    //     flexDirection: 'column',
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    //     minHeight: '100vh',
-    //     position: 'relative',
-    //     backgroundImage: 'url(/robotillo.jpeg)', // Cambia la URL según tu imagen
-    //     backgroundSize: 'cover',
-    //     backgroundPosition: 'center',
-    //   }}
-    >
+    <Box>
       <Box sx={{ zIndex: 1, width: '100%', maxWidth: '400px' }}>
-        {showRegister ? (
-          <>
-            <RegisterPage />
-            <Typography variant="body2" sx={{ mt: 2 }}>
-              ¿Ya tienes una cuenta? 
-              <Button onClick={toggleRegister} sx={{ color: 'green' }}>
-                Inicia sesión
-              </Button>
-            </Typography>
-          </>
+        {isRegister ? (
+          <RegisterPage />
         ) : (
-          <>
-            <LoginPage />
-            <Typography variant="body2" sx={{ mt: 2 }}>
-              ¿No tienes una cuenta? 
-              <Button onClick={toggleRegister} sx={{ color: 'green' }}>
-                Regístrate
-              </Button>
-            </Typography>
-          </>
+          <LoginPage onShowRegister={togglePage} />
         )}
+        <Typography variant="body2" sx={{ mt: 2 }}>
+          {isRegister ? "¿Ya tienes una cuenta?" : "¿No tienes una cuenta?"}
+          <Button onClick={togglePage} sx={{ color: 'green' }}>
+            {isRegister ? "Inicia sesión" : "Regístrate"}
+          </Button>
+        </Typography>
       </Box>
     </Box>
   );
