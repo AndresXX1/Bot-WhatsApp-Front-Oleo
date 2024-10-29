@@ -185,7 +185,7 @@ function Dashboard({ children }) {
                     flexGrow: 1, 
                     p: 3, 
                     mt: location.pathname === '/' || location.pathname === "/register" ? 0 : 8, // No margen superior si la ruta es "/"
-                    backgroundImage: 'url(/robotillo.jpeg)', 
+                  
                     backgroundSize: 'cover', 
                     backgroundPosition: 'center', 
                     minHeight: '100vh', 
