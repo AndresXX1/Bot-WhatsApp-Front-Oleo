@@ -184,8 +184,8 @@ function Dashboard({ children }) {
                 sx={{ 
                     flexGrow: 1, 
                     p: 3, 
+                    backgroundImage: 'url(/robotillo.jpeg)', 
                     mt: location.pathname === '/' || location.pathname === "/register" ? 0 : 8, // No margen superior si la ruta es "/"
-                  
                     backgroundSize: 'cover', 
                     backgroundPosition: 'center', 
                     minHeight: '100vh', 
