@@ -34,7 +34,7 @@ const RegisterPage = () => {
     password: '',
   });
 
-  const [showTooltip, setShowTooltip] = useState(false); // Estado para manejar la biñeta
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
@@ -63,7 +63,7 @@ const RegisterPage = () => {
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {
       name: validateField('name', values.name),
@@ -76,12 +76,51 @@ const RegisterPage = () => {
     setErrors(newErrors);
 
     if (!Object.values(newErrors).some((error) => error)) {
-      console.log("Usuario registrado", values);
-      toast.success('¡Registro exitoso!', {
-        position: 'top-right',
-        autoClose: 3000,
-        hideProgressBar: false,
-      });
+      try {
+        const response = await fetch('https://whatsapp-bot-oleo.onrender.com/api/usuarios/registro', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            nombre: values.name,
+            apellido: values.lastName,
+            telefono: values.phone,
+            email: values.email,
+            contraseña: values.password,
+          }),
+        });
+
+        if (response.ok) {
+          toast.success('¡Registro exitoso!', {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+          });
+          // Limpiar los campos después del registro exitoso
+          setValues({
+            password: '',
+            showPassword: false,
+            name: '',
+            email: '',
+            phone: '',
+            lastName: '',
+          });
+        } else {
+          const errorData = await response.json();
+          toast.error(errorData.message || 'Error al registrar el usuario.', {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+          });
+        }
+      } catch (error) {
+        toast.error('Error de conexión.', {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+        });
+      }
     } else {
       toast.error('Por favor completa todos los campos correctamente.', {
         position: 'top-right',
@@ -97,14 +136,12 @@ const RegisterPage = () => {
 
   const handleTooltip = () => {
     setShowTooltip(true); // Muestra la biñeta
-    // Oculta la biñeta después de 3 segundos
   };
 
   const handleClick = () => {
     handleTooltip(); // Muestra la biñeta
     togglePage(); // Cambia a la página de inicio de sesión inmediatamente
   };
-
 
   return (
     <Box
@@ -123,24 +160,23 @@ const RegisterPage = () => {
         backgroundPosition: 'center',
         padding: 2,
         zIndex: 1,
-        
       }}
     >
       <Box
         sx={{
           width: '100%',
-          maxHeight:"700px",
+          maxHeight: "700px",
           maxWidth: '420px',
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
           padding: 4,
           borderRadius: 2,
-          minHeight: '600px', // Altura máxima del contenedor
-          overflowY: 'auto', // Scroll vertical si el contenido excede la altura
+          minHeight: '600px',
+          overflowY: 'auto',
           '&::-webkit-scrollbar': {
             width: '6px',
           },
           '&::-webkit-scrollbar-thumb': {
-            backgroundColor: 'black', // Color del scrollbar
+            backgroundColor: 'black',
             borderRadius: '10px',
           },
           '&::-webkit-scrollbar-track': {
@@ -148,11 +184,10 @@ const RegisterPage = () => {
           },
         }}
       >
-        <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5, marginBottom:"25px" }}>
+        <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5, marginBottom: "25px" }}>
           Crea tu cuenta y comienza la aventura! 🚀
-      
-</Typography>
-      
+        </Typography>
+        
         <form noValidate autoComplete='off' onSubmit={handleFormSubmit}>
           <TextField
             fullWidth
@@ -220,12 +255,11 @@ const RegisterPage = () => {
           >
             Regístrate
           </Button>
-       
         </form>
        
-        <Box sx={{ position: 'relative',marginTop:"20px" }}>
+        <Box sx={{ position: 'relative', marginTop: "20px" }}>
           <Typography variant='body3'>¿Ya tienes cuenta?</Typography>
-          <Typography onClick={handleClick} style={{ fontSize: "20px", color: "green", cursor: "pointer", marginLeft:"150px", marginTop:"-26px" }}>
+          <Typography onClick={handleClick} style={{ fontSize: "20px", color: "green", cursor: "pointer", marginLeft: "150px", marginTop: "-26px" }}>
             Inicia sesión
           </Typography>
           {showTooltip && (
@@ -235,10 +269,10 @@ const RegisterPage = () => {
                 top: '-20px',
                 left: '50%',
                 transform: 'translateX(-50%)',
-                backgroundColor: 'white', // Fondo blanco transparente
+                backgroundColor: 'white',
                 padding: '10px 15px',
                 borderRadius: '12px',
-                border: '2px solid red', // Bordes rojos
+                border: '2px solid red',
                 boxShadow: '0 4px 15px rgba(0, 0, 0, 0.9)',
                 zIndex: 10,
                 transition: 'transform 0.3s ease',
@@ -250,7 +284,7 @@ const RegisterPage = () => {
                 maxWidth: '200px',
                 marginLeft: '-100px',
                 '&:hover': {
-                  transform: 'translateX(-50%) translateY(-5px)', // Efecto al pasar el mouse
+                  transform: 'translateX(-50%) translateY(-5px)',
                 },
               }}
             >
@@ -262,7 +296,6 @@ const RegisterPage = () => {
       <ToastContainer />
     </Box>
   );
-  
 };
 
 export default RegisterPage;

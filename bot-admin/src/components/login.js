@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import RegisterPage from './register'; // Asegúrate de que la ruta sea correcta
+import { useNavigate } from 'react-router-dom';
+import RegisterPage from './register';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -15,9 +16,11 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import FormHelperText from '@mui/material/FormHelperText';
 import EyeOutline from 'mdi-material-ui/EyeOutline';
+import { jwtDecode } from 'jwt-decode';
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -62,14 +65,59 @@ const LoginPage = () => {
 
     // Lógica de inicio de sesión
     try {
-      localStorage.setItem('authToken', 'tu_token_aqui'); // Guardar token simulado
-      toast.success('¡Inicio de sesión exitoso!', {
-        position: 'top-right',
-        autoClose: 3000,
+      const response = await fetch('https://whatsapp-bot-oleo.onrender.com/api/usuarios/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: values.email,
+          contraseña: values.password,
+        }),
       });
+
+      if (response.ok) {
+        const data = await response.json();
+        const token = data.token; // Obtén el token de la respuesta
+        localStorage.setItem('authToken', token); // Guarda el token de autenticación
+        localStorage.setItem('userData', JSON.stringify(data.user)); // Guarda los datos del usuario
+
+        toast.success('¡Inicio de sesión exitoso!', {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+
+        // Decodifica el token para obtener el rol del usuario
+        const decodedToken = jwtDecode(token);
+        const userRole = decodedToken.rol; // Asumiendo que el rol está en el token
+
+        // Redirigir según el rol del usuario
+        switch (userRole) {
+          case 'admin':
+            navigate('/home');
+            break;
+          case 'cocinero':
+            navigate('/Cocina');
+            break;
+          case 'cliente':
+            navigate('/Cliente');
+            break;
+          case 'encargado':
+            navigate('/sistema');
+            break;
+          default:
+            navigate('/');
+        }
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.message || 'Error al iniciar sesión. Por favor, verifica tus credenciales.', {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+      }
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
-      toast.error('Error al iniciar sesión. Por favor, verifica tus credenciales.', {
+      toast.error('Error de conexión.', {
         position: 'top-right',
         autoClose: 3000,
       });

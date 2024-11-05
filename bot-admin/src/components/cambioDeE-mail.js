@@ -13,25 +13,72 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  FormHelperText,
 } from '@mui/material';
 
 const CambioDeEmail = () => {
   const navigate = useNavigate();
   const [values, setValues] = useState({
-    newEmail: '',
-    currentPassword: '',
+    email: '',
+    contraseña: '',
+  });
+  const [errors, setErrors] = useState({
+    email: '',
+    contraseña: '',
   });
   const [open, setOpen] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setValues((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: '' }));
+
+    // Validación en tiempo real
+    if (name === 'email') {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(value)) {
+        setErrors((prev) => ({ ...prev, email: 'Ingrese un correo electrónico válido.' }));
+      }
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    toast.success('Correo electrónico cambiado exitosamente');
-    handleClickOpen(); // Abrir el modal después de éxito
+
+    // Verificamos errores antes de enviar
+    if (errors.email || errors.contraseña || !values.email || !values.contraseña) {
+      toast.error('Corrija los errores antes de enviar.');
+      return;
+    }
+
+    const authToken = localStorage.getItem('authToken');
+    const usuarioId = localStorage.getItem('userId');
+
+    try {
+      const response = await fetch(`https://whatsapp-bot-oleo.onrender.com/api/usuarios/cambiar-email`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          email: values.email,
+          contraseña: values.contraseña,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        toast.error(errorData.message || 'Error al cambiar el correo electrónico');
+        return;
+      }
+
+      toast.success('Correo electrónico cambiado exitosamente');
+      handleClickOpen();
+    } catch (error) {
+      console.error('Error al cambiar el correo electrónico:', error);
+      toast.error('Error al cambiar el correo electrónico');
+    }
   };
 
   const handleClickOpen = () => setOpen(true);
@@ -71,33 +118,42 @@ const CambioDeEmail = () => {
                 <TextField
                   label="Nuevo correo electrónico"
                   type="email"
-                  name="newEmail"
-                  value={values.newEmail}
+                  name="email"
+                  value={values.email}
                   onChange={handleChange}
                   fullWidth
                   margin="normal"
                   required
                   InputProps={{ style: { height: '56px', fontSize: '16px' } }}
+                  error={!!errors.email}
                 />
+                <FormHelperText error>{errors.email}</FormHelperText>
+
                 <TextField
                   label="Contraseña actual"
                   type="password"
-                  name="currentPassword"
-                  value={values.currentPassword}
+                  name="contraseña"
+                  value={values.contraseña}
                   onChange={handleChange}
                   fullWidth
                   margin="normal"
                   required
                   InputProps={{ style: { height: '56px', fontSize: '16px' } }}
+                  error={!!errors.contraseña}
                 />
+                <FormHelperText error={!!errors.contraseña}>{errors.contraseña}</FormHelperText>
               </Box>
               <img src="/config.png" alt="Configuración" style={{ height: '200px', marginLeft: '16px' }} />
             </Grid>
           </Grid>
         </CardContent>
         <Box sx={{ mt: 2 }}>
-          <Button type="submit" variant="contained" sx={{ backgroundColor: '#e8c39e', color: 'black' }}>Guardar Cambios</Button>
-          <Button type="reset" variant="outlined" sx={{ backgroundColor: '#ffffff', color: 'black' }}>Reiniciar</Button>
+          <Button type="submit" variant="contained" sx={{ backgroundColor: '#e8c39e', color: 'black' }}>
+            Guardar Cambios
+          </Button>
+          <Button type="reset" variant="outlined" sx={{ backgroundColor: '#ffffff', color: 'black' }}>
+            Reiniciar
+          </Button>
         </Box>
       </form>
     </>

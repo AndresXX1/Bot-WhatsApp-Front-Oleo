@@ -29,6 +29,7 @@
     "domexception": "^4.0.0",
     "glob": "^11.0.0",
     "inflight": "^1.0.6",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.453.0",
     "mdi-material-ui": "^7.9.2",
     "moment": "^2.30.1",

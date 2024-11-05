@@ -20,13 +20,13 @@ const Configuraciones = () => {
                 <Tab value="security" label={
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <LockOpenOutline />
-                        <Typography variant="body2" sx={{ ml: 1 }}>Seguridad</Typography>
+                        <Typography variant="body2" sx={{ ml: 1 }}>Contraseñas</Typography>
                     </Box>
                 } />
                 <Tab value="info" label={
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <InformationOutline />
-                        <Typography variant="body2" sx={{ ml: 1 }}>Información</Typography>
+                        <Typography variant="body2" sx={{ ml: 1 }}>E-mail</Typography>
                     </Box>
                 } />
             </Tabs>
