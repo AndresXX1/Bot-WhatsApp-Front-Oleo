@@ -42,45 +42,60 @@ const CambioDeEmail = () => {
     }
   };
 
+  const decodeToken = (token) => {
+    if (!token) return null;
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Verificamos errores antes de enviar
     if (errors.email || errors.contraseña || !values.email || !values.contraseña) {
-      toast.error('Corrija los errores antes de enviar.');
-      return;
+        toast.error('Corrija los errores antes de enviar.');
+        return;
     }
 
     const authToken = localStorage.getItem('authToken');
     console.log('Token de autenticación:', authToken);
-    const usuarioId = localStorage.getItem('userId');
+    console.log('Email:', values.email);
+    console.log('Contraseña:', values.contraseña);
+
+    // Obtener el userId del token
+    const userId = decodeToken(authToken)?.userId;
+
+    if (!userId) {
+        toast.error('Usuario no autenticado.');
+        return;
+    }
 
     try {
-      const response = await fetch(`https://whatsapp-bot-oleo.onrender.com/api/usuarios/cambiar-email`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify({
-          email: values.email,
-          contraseña: values.contraseña,
-        }),
-      });
+        const response = await fetch(`https://whatsapp-bot-oleo.onrender.com/api/usuarios/${userId}/cambiar-email`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${authToken}`,
+            },
+            body: JSON.stringify({
+                email: values.email,
+                contraseña: values.contraseña,
+            }),
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        toast.error(errorData.message || 'Error al cambiar el correo electrónico');
-        return;
-      }
+        if (!response.ok) {
+            const errorData = await response.json();
+            toast.error(errorData.message || 'Error al cambiar el correo electrónico');
+            return;
+        }
 
-      toast.success('Correo electrónico cambiado exitosamente');
-      handleClickOpen();
+        toast.success('Correo electrónico cambiado exitosamente');
+        handleClickOpen();
     } catch (error) {
-      console.error('Error al cambiar el correo electrónico:', error);
-      toast.error('Error al cambiar el correo electrónico');
+        toast.error('Error al cambiar el correo electrónico');
     }
-  };
+};
+
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = (shouldLogout) => {
