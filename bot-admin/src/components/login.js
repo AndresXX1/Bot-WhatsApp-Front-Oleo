@@ -79,8 +79,15 @@ const LoginPage = () => {
       if (response.ok) {
         const data = await response.json();
         const token = data.token; // Obtén el token de la respuesta
-        localStorage.setItem('authToken', token); // Guarda el token de autenticación
-        localStorage.setItem('userData', JSON.stringify(data.user)); // Guarda los datos del usuario
+        console.log('Token recibido:', token); // Log del token recibido
+
+        // Guarda el token de autenticación en el localStorage
+        localStorage.setItem('authToken', token);
+        console.log('Token guardado en localStorage:', localStorage.getItem('authToken')); // Log del token guardado
+
+        // Guarda los datos del usuario en el localStorage
+        localStorage.setItem('userData', JSON.stringify(data.user));
+        console.log('Datos del usuario guardados en localStorage:', localStorage.getItem('userData')); // Log de los datos del usuario guardados
 
         toast.success('¡Inicio de sesión exitoso!', {
           position: 'top-right',
@@ -90,6 +97,7 @@ const LoginPage = () => {
         // Decodifica el token para obtener el rol del usuario
         const decodedToken = jwtDecode(token);
         const userRole = decodedToken.rol; // Asumiendo que el rol está en el token
+        console.log('Rol decodificado del token:', userRole); // Log del rol
 
         // Redirigir según el rol del usuario
         switch (userRole) {

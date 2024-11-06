@@ -52,6 +52,7 @@ const CambioDeEmail = () => {
     }
 
     const authToken = localStorage.getItem('authToken');
+    console.log('Token de autenticación:', authToken);
     const usuarioId = localStorage.getItem('userId');
 
     try {
